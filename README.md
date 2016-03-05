@@ -7,12 +7,14 @@ Parse basic element like path, line, rect, circle, ellipse, polygon and polyline
 ## Usage
 ```
 FXSVGView *svgView = [[FXSVGView alloc] initWithFrame:frame];
-[svgView loadMap:svgname withColors:nil];
+[svgView loadSVGFile:@"filename"];
 [self.view addSubview:svgView];
 ```
 Then, that's done.
 
 ## TODO
-Filter and gradient effect etc.
+1. Fill color is not display as I expected.
+2. Some path and polyline is showing too much.
+3. Filter and gradient effect etc.
 
 
