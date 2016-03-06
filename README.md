@@ -1,5 +1,5 @@
 # FXSVG
-A repository to parse SVG and draw it on the screen as UIShapeLayer.
+A repository to parse SVG and draw it on the screen with CAShapeLayer.
 
 ## Done
 Parse basic element like path, line, rect, circle, ellipse, polygon and polyline.
