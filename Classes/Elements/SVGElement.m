@@ -1,37 +1,42 @@
 //
-//  FXSVGElement.m
-//  FXSVG
+//  SVGElement.m
+//  Inspiration
 //
-//  Created by Zeacone on 16/3/5.
-//  Copyright © 2016年 Zeacone. All rights reserved.
+//  Created by Zeacone on 2017/1/24.
+//  Copyright © 2017年 ics. All rights reserved.
 //
 
-#import "FXSVGElement.h"
+#import "SVGElement.h"
 
 #define colorFromHex(hex, a) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:a]
 
 // Setting color from normal RGB way.
 #define colorFromRGB(r, g, b, a) [UIColor colorWithRed:r / 255.0 green:g / 255.0 blue:b / 255.0 alpha:a]
 
-@implementation FXSVGElement
+@implementation SVGElement
 
-- (instancetype)initWithAttributes:(NSDictionary *)attributes {
+- (instancetype)initWithAttribute:(NSDictionary *)attribute
+{
     self = [super init];
-    if (!self) {
-        return nil;
+    if (self) {
+        [self readAttribute:attribute];
     }
+    return self;
+}
+
+- (void)readAttribute:(NSDictionary *)attribute {
     
-    self.clickable  = NO;
-    self.title      = [attributes objectForKey:@"title"];
-    self.identifier = [attributes objectForKey:@"id"];
-    self.className  = [attributes objectForKey:@"class"];
-    self.tranform   = [attributes objectForKey:@"transform"];
+    self.selectable = NO;
+    self.title      = [attribute objectForKey:@"title"];
+    self.identifier = [attribute objectForKey:@"id"];
+    self.className  = [attribute objectForKey:@"class"];
+    self.tranform   = [attribute objectForKey:@"transform"];
     self.path       = [UIBezierPath bezierPath];
     
-    NSString *style = [attributes objectForKey:@"style"];
+    NSString *style = [attribute objectForKey:@"style"];
     NSArray *styleComponents = [style componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@":;"]];
     NSMutableArray *components = [NSMutableArray arrayWithArray:styleComponents];
-    [components removeLastObject];
+//    [components removeLastObject];
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     
     for (NSInteger i = 0; i < components.count; i += 2) {
@@ -40,17 +45,15 @@
     
     if ([dic objectForKey:@"fill"]) {
         self.fillColor = [self colorWithHexString:[dic objectForKey:@"fill"]];
-    } else if ([attributes objectForKey:@"fill"]) {
-        self.fillColor = [self colorWithHexString:[attributes objectForKey:@"fill"]];
+    } else if ([attribute objectForKey:@"fill"]) {
+        self.fillColor = [self colorWithHexString:[attribute objectForKey:@"fill"]];
     }
     
-    if ([attributes objectForKey:@"stroke"]) {
-        self.strokeColor = [self colorWithHexString:[attributes objectForKey:@"stroke"]];
+    if ([attribute objectForKey:@"stroke"]) {
+        self.strokeColor = [self colorWithHexString:[attribute objectForKey:@"stroke"]];
     } else {
         self.strokeColor = [UIColor blackColor];
     }
-    
-    return self;
 }
 
 - (UIColor *)colorWithHexString:(NSString *)stringToConvert
