@@ -185,7 +185,6 @@
             _end = p;
         }
     }
-    NSLog(@"this is a path");
 }
 
 - (void)addQuadRelative:(BOOL)relative {

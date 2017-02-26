@@ -17,10 +17,14 @@
 @property (nonatomic, copy) NSString *className;
 @property (nonatomic, copy) NSString *tranform;
 @property (nonatomic, copy) NSString *group;
+
 @property (nonatomic, strong) UIBezierPath *path;
 
 @property (nonatomic, strong) UIColor *strokeColor;
 @property (nonatomic, strong) UIColor *fillColor;
+
+@property (nonatomic, strong) CAShapeLayer *shape;
+
 @property (nonatomic, assign) BOOL selectable;
 
 @end

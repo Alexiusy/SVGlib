@@ -9,6 +9,8 @@
 #ifndef SVG_h
 #define SVG_h
 
+#import "SVGParser.h"
+
 #import "SVGPath.h"
 #import "SVGLine.h"
 #import "SVGRect.h"

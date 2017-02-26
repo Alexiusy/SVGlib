@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GDataXMLNode.h"
 
 @interface SVGParser : NSObject <NSXMLParserDelegate>
 
-@property (nonatomic, strong) NSArray *elementNames;
+@property (nonatomic, strong) NSMutableArray<CAShapeLayer *> *layers;
 
 - (void)parseFile:(NSString *)fileName;
 
