@@ -36,6 +36,8 @@
         }
     }];
     [self.path closePath];
+    
+    self.shape.path = self.path.CGPath;
 }
 
 @end

@@ -32,6 +32,7 @@
     self.className  = [attribute objectForKey:@"class"];
     self.tranform   = [attribute objectForKey:@"transform"];
     self.path       = [UIBezierPath bezierPath];
+    self.shape = [CAShapeLayer layer];
     
     NSString *style = [attribute objectForKey:@"style"];
     NSArray *styleComponents = [style componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@":;"]];
