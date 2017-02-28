@@ -20,15 +20,18 @@
         self.width = ((NSString *)attribute[@"width"]).doubleValue;
         self.height = ((NSString *)attribute[@"height"]).doubleValue;
         
-        [self drawRect];
+        [self drawRectWithAttribute:attribute];
     }
     return self;
 }
 
-- (void)drawRect {
+- (void)drawRectWithAttribute:(NSDictionary *)attr {
     
     CGRect rect = CGRectMake(_x, _y, _width, _height);
     self.path = [UIBezierPath bezierPathWithRect:rect];
+
+    
+    self.shape.path = self.path.CGPath;
 }
 
 @end

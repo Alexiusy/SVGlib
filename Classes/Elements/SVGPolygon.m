@@ -26,6 +26,9 @@
     
     [strArray enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
+        if (obj.length == 0) {
+            return;
+        }
         NSString *point_string = [NSString stringWithFormat:@"{%@}", obj];
         CGPoint point = CGPointFromString(point_string);
         
@@ -36,8 +39,8 @@
         }
     }];
     [self.path closePath];
-    
     self.shape.path = self.path.CGPath;
+//    self.shape.fillColor = [UIColor clearColor].CGColor;
 }
 
 @end

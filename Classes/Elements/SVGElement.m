@@ -32,7 +32,6 @@
     self.className  = [attribute objectForKey:@"class"];
     self.tranform   = [attribute objectForKey:@"transform"];
     self.path       = [UIBezierPath bezierPath];
-    self.shape = [CAShapeLayer layer];
     
     NSString *style = [attribute objectForKey:@"style"];
     NSArray *styleComponents = [style componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@":;"]];
@@ -53,8 +52,13 @@
     if ([attribute objectForKey:@"stroke"]) {
         self.strokeColor = [self colorWithHexString:[attribute objectForKey:@"stroke"]];
     } else {
-        self.strokeColor = [UIColor blackColor];
+        self.strokeColor = [UIColor clearColor];
     }
+    
+    self.shape = [CAShapeLayer layer];
+    self.shape.fillColor = self.fillColor.CGColor;
+    self.shape.strokeColor = self.strokeColor.CGColor;
+    self.shape.lineWidth = 1.0;
 }
 
 - (UIColor *)colorWithHexString:(NSString *)stringToConvert
@@ -63,12 +67,12 @@
     
     //    0x123455; #FD43672
     // String should be 6 or 8 characters
-    if ([cString length] < 6) return [UIColor whiteColor];
+    if ([cString length] < 6) return [UIColor clearColor];
     
     // strip 0X if it appears
     if ([cString hasPrefix:@"0X"]) cString = [cString substringFromIndex:2];
     if ([cString hasPrefix:@"#"]) cString = [cString substringFromIndex:1];
-    if ([cString length] != 6) return [UIColor whiteColor];
+    if ([cString length] != 6) return [UIColor clearColor];
     // Separate into r, g, b substrings
     NSRange range;
     range.location = 0;

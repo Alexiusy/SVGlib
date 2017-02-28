@@ -10,4 +10,17 @@
 
 @implementation SVGCircle
 
+- (instancetype)initWithAttribute:(NSDictionary *)attribute
+{
+    self = [super initWithAttribute:attribute];
+    if (self) {
+        [self drawCircle:attribute];
+    }
+    return self;
+}
+
+- (void)drawCircle:(NSDictionary *)attribute {
+    
+}
+
 @end

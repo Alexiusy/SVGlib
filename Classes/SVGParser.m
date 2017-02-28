@@ -36,48 +36,38 @@
     } else if ([elementName isEqualToString:@"path"])
     {
         SVGPath *path = [[SVGPath alloc] initWithAttribute:attributeDict];
-        [self.layers addObject:path.path];
+        [self.layers addObject:path.shape];
         
     } else if ([elementName isEqualToString:@"line"])
     {
         SVGLine *line = [[SVGLine alloc] initWithAttribute:attributeDict];
-        [self.layers addObject:line.path];
+        [self.layers addObject:line.shape];
         
     }else if ([elementName isEqualToString:@"rect"])
     {
         SVGRect *rect = [[SVGRect alloc] initWithAttribute:attributeDict];
-        [self.layers addObject:rect.path];
+        [self.layers addObject:rect.shape];
         
     } else if ([elementName isEqualToString:@"circle"])
     {
         SVGCircle *circle = [[SVGCircle alloc] initWithAttribute:attributeDict];
-        [self.layers addObject:circle.path];
+        [self.layers addObject:circle.shape];
         
     } else if ([elementName isEqualToString:@"ellipse"])
     {
         SVGEllipse *ellipse = [[SVGEllipse alloc] initWithAttribute:attributeDict];
-        [self.layers addObject:ellipse.path];
+        [self.layers addObject:ellipse.shape];
         
     } else if ([elementName isEqualToString:@"polyline"])
     {
         SVGPolyline *polyline = [[SVGPolyline alloc] initWithAttribute:attributeDict];
-        [self.layers addObject:polyline.path];
+        [self.layers addObject:polyline.shape];
         
     } else if ([elementName isEqualToString:@"polygon"])
     {
         SVGPolygon *polygon = [[SVGPolygon alloc] initWithAttribute:attributeDict];
-        [self.layers addObject:polygon.path];
+        [self.layers addObject:polygon.shape];
     }
-}
-
-- (CAShapeLayer *)generateLayer:(UIBezierPath *)path {
-    
-    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    shapeLayer.path = path.CGPath;
-    shapeLayer.lineWidth = 1.0;
-    shapeLayer.strokeColor = [UIColor redColor].CGColor;
-    
-    return shapeLayer;
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser {

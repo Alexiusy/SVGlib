@@ -19,20 +19,16 @@
         SVGParser *parser = [[SVGParser alloc] init];
         [parser parseFile:@"bazhan.svg"];
         
-        [self drawLayers:[parser.paths copy]];
+        [self drawLayers:[parser.layers copy]];
     }
     return self;
 }
 
-- (void)drawLayers:(NSArray<UIBezierPath *> *)paths {
+- (void)drawLayers:(NSArray<CAShapeLayer *> *)layers {
     
-    for (UIBezierPath *path in paths) {
-        CAShapeLayer *shape = [CAShapeLayer layer];
-        shape.path = path.CGPath;
-        shape.strokeColor = [UIColor greenColor].CGColor;
-        shape.fillColor = [UIColor clearColor].CGColor;
-        shape.lineWidth = 2.0;
-        [self.layer addSublayer:shape];
+    for (CAShapeLayer *layer in layers) {
+        layer.affineTransform = CGAffineTransformScale(layer.affineTransform, 0.1, 0.1);
+        [self.layer addSublayer:layer];
     }
 }
 

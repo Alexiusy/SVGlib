@@ -18,13 +18,20 @@
 @property (nonatomic, copy) NSString *tranform;
 @property (nonatomic, copy) NSString *group;
 
+#pragma mark - Public property
+@property (nonatomic, strong) CAShapeLayer *shape;
 @property (nonatomic, strong) UIBezierPath *path;
 
+/**
+ Some CAShapeLayer property
+ */
 @property (nonatomic, strong) UIColor *strokeColor;
 @property (nonatomic, strong) UIColor *fillColor;
 
-@property (nonatomic, strong) CAShapeLayer *shape;
 
+/**
+ A boolean value that decide if the CAShapeLayer can be selected. Eg. Circle, Rectangle and Polygon can be selected and open path cannot be selected.
+ */
 @property (nonatomic, assign) BOOL selectable;
 
 @end
