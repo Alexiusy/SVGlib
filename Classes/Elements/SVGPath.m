@@ -10,8 +10,8 @@
 
 @interface SVGPath ()
 
-@property (nonatomic, strong) NSMutableArray<NSValue *> *points;
-
+@property (nonatomic, assign) CGPoint preControlPoint;
+@property (nonatomic, assign) CGPoint preDestination;
 @property (nonatomic, assign) CGPoint end;
 
 @end
@@ -38,87 +38,83 @@
 
 - (void)parseAction:(NSString *)actionString {
     
-    NSArray *charaters = @[@"M", @"m", @"L", @"l", @"A", @"a", @"C", @"c", @"Q", @"q", @"S", @"s", @"T", @"t", @"H", @"h", @"V", @"v", @"Z", @"z"];
+    NSScanner *scanner = [NSScanner scannerWithString:actionString];
     
-    NSArray *cmdArray = [actionString componentsSeparatedByString:@" "];
     
-    self.points = [NSMutableArray array];
-    NSString *currentCMD = nil;
+    NSCharacterSet *skipSet = [NSCharacterSet characterSetWithCharactersInString:@" ,\n"];
+    scanner.charactersToBeSkipped = skipSet;
     
-    for (NSString *cmd in cmdArray) {
-        if ([charaters containsObject:cmd]) {
-            if (currentCMD) {
-                [self executeCommand:[currentCMD UTF8String]];
-            }
-            
-            [self.points removeAllObjects];
-            
-            currentCMD = cmd;
-        } else {
-            
-            NSString *pointStr = [NSString stringWithFormat:@"{%@}", cmd];
-            CGPoint point = CGPointFromString(pointStr);
-            [self.points addObject:[NSValue valueWithCGPoint:point]];
+    NSCharacterSet *commandSet = [NSCharacterSet characterSetWithCharactersInString:@"MLACQSTHVZmlacqsthvz"];
+    NSString *commandStr = nil;
+    
+    while ([scanner scanCharactersFromSet:commandSet intoString:&commandStr]) {
+        
+        NSMutableArray<NSNumber *> *numbers = [NSMutableArray array];
+        double number = 0;
+        
+        while ([scanner scanDouble:&number]) {
+            [numbers addObject:@(number)];
         }
+        [self executeCommand:[commandStr UTF8String] Numbers:[numbers copy]];
     }
 }
 
-- (void)executeCommand:(const char *)command {
+- (void)executeCommand:(const char *)command Numbers:(NSArray<NSNumber *> *)numbers {
     
     switch (command[0]) {
         case 'M':
-            [self moveRelative:NO];
+            [self move:numbers Relative:NO];
             break;
         case 'm':
-            [self moveRelative:YES];
+            [self move:numbers Relative:YES];
             break;
         case 'L':
-            [self addLineRelative:NO];
+            [self addLine:numbers Relative:NO];
             break;
         case 'l':
-            [self addLineRelative:YES];
+            [self addLine:numbers Relative:YES];
             break;
         case 'A':
-            [self addArcRelative:NO];
+            [self addArc:numbers Relative:NO];
             break;
         case 'a':
-            [self addArcRelative:YES];
+            [self addArc:numbers Relative:YES];
             break;
         case 'C':
-            [self addCurveRelative:NO];
+            [self addCurve:numbers Relative:NO];
             break;
         case 'c':
-            [self addCurveRelative:YES];
+            [self addCurve:numbers Relative:YES];
             break;
         case 'Q':
-            [self addQuadRelative:NO];
+            [self addQuad:numbers Relative:NO];
             break;
         case 'q':
-            [self addQuadRelative:YES];
+            [self addQuad:numbers Relative:YES];
             break;
         case 'S':
-            [self addSmoothRelative:NO];
+            [self addSmooth:numbers Relative:NO];
             break;
         case 's':
-            [self addSmoothRelative:YES];
+            [self addSmooth:numbers Relative:YES];
             break;
         case 'T':
-            [self addCubicRelative:NO];
+            [self addCubic:numbers Relative:NO];
             break;
         case 't':
-            [self addCubicRelative:YES];
+            [self addCubic:numbers Relative:YES];
             break;
         case 'H':
-            [self addHorizonRelative:NO];
+            [self addHorizon:numbers Relative:NO];
             break;
         case 'h':
-            [self addHorizonRelative:YES];
+            [self addHorizon:numbers Relative:YES];
             break;
         case 'V':
-            [self addVerticalRelative:NO];
+            [self addVertical:numbers Relative:NO];
             break;
         case 'v':
-            [self addVerticalRelative:YES];
+            [self addVertical:numbers Relative:YES];
             break;
         case 'Z':
         case 'z':
@@ -131,11 +127,11 @@
     }
 }
 
-- (void)moveRelative:(BOOL)relative {
+- (void)move:(NSArray<NSNumber *> *)numbers Relative:(BOOL)relative {
     
-    for (NSValue *value in self.points) {
+    for (NSInteger i = 0; i < numbers.count / 2; i++) {
         
-        CGPoint p = value.CGPointValue;
+        CGPoint p = CGPointMake(numbers[i*2].doubleValue, numbers[i*2+1].doubleValue);
         
         if (relative) {
             self.end = CGPointMake(_end.x + p.x, _end.y + p.y);
@@ -144,36 +140,40 @@
         }
         [self.path moveToPoint:_end];
     }
+    self.preControlPoint = CGPointZero;
 }
 
-- (void)addLineRelative:(BOOL)relative {
+- (void)addLine:(NSArray<NSNumber *> *)numbers Relative:(BOOL)relative {
     
-    for (NSValue *value in self.points) {
+    for (NSInteger i = 0; i < numbers.count / 2; i++) {
         
-        CGPoint p = value.CGPointValue;
+        CGPoint p = CGPointMake(numbers[i*2].doubleValue, numbers[i*2+1].doubleValue);
         
         if (relative) {
             _end = CGPointMake(_end.x + p.x, _end.y + p.y);
         } else {
             _end = p;
         }
-        
         [self.path addLineToPoint:_end];
     }
+    self.preControlPoint = CGPointZero;
 }
 
 // 暂无头绪
-- (void)addArcRelative:(BOOL)relative {
-    
+- (void)addArc:(NSArray<NSNumber *> *)numbers Relative:(BOOL)relative {
+    NSLog(@"No arc solution.");
+    self.preControlPoint = CGPointZero;
 }
 
-- (void)addCurveRelative:(BOOL)relative {
+- (void)addCurve:(NSArray<NSNumber *> *)numbers Relative:(BOOL)relative {
     
-    for (NSInteger i = 0; i < [self.points count] / 3; i++) {
+    for (NSInteger i = 0; i < [numbers count] / 6; i++) {
         
-        CGPoint c1 = [self.points objectAtIndex:i*3+0].CGPointValue;
-        CGPoint c2 = [self.points objectAtIndex:i*3+1].CGPointValue;
-        CGPoint p  = [self.points objectAtIndex:i*3+2].CGPointValue;
+        CGPoint c1 = CGPointMake(numbers[i*6].doubleValue, numbers[i*6+1].doubleValue);
+        CGPoint c2 = CGPointMake(numbers[i*6+2].doubleValue, numbers[i*6+3].doubleValue);
+        CGPoint p  = CGPointMake(numbers[i*6+4].doubleValue, numbers[i*6+5].doubleValue);
+        
+        self.preControlPoint = CGPointMake(_end.x + c2.x, _end.y + c2.y);
         
         if (relative) {
             [self.path addCurveToPoint:CGPointMake(_end.x + p.x, _end.y + p.y)
@@ -187,12 +187,12 @@
     }
 }
 
-- (void)addQuadRelative:(BOOL)relative {
+- (void)addQuad:(NSArray<NSNumber *> *)numbers Relative:(BOOL)relative {
     
-    for (NSInteger i = 0; i < [self.points count] / 2; i++) {
+    for (NSInteger i = 0; i < [numbers count] / 4; i++) {
         
-        CGPoint controlPoint = [self.points objectAtIndex:i*2+0].CGPointValue;
-        CGPoint finalPoint =   [self.points objectAtIndex:i*2+1].CGPointValue;
+        CGPoint controlPoint = CGPointMake(numbers[i*4].doubleValue, numbers[i*4+1].doubleValue);
+        CGPoint finalPoint = CGPointMake(numbers[i*4+2].doubleValue, numbers[i*4+3].doubleValue);
         
         if (relative) {
             [self.path addQuadCurveToPoint:CGPointMake(_end.x + finalPoint.x, _end.y + finalPoint.y)
@@ -203,24 +203,68 @@
             _end = finalPoint;
         }
     }
+    self.preControlPoint = CGPointZero;
 }
 
 // S 命令用来创建与之前曲线相同的曲线，三次贝塞尔曲线
-- (void)addSmoothRelative:(BOOL)relative {
+- (void)addSmooth:(NSArray<NSNumber *> *)numbers Relative:(BOOL)relative {
+    NSLog(@"No smooth solution.");
+    
+    for (NSInteger i = 0; i < numbers.count / 4; i++) {
+        CGPoint c1 = CGPointMake(_end.x + (_end.x - _preControlPoint.x), _end.y + (_end.y - _preControlPoint.y));
+        CGPoint c2 = CGPointMake(numbers[i*2].doubleValue, numbers[i*2+1].doubleValue);
+        CGPoint p = CGPointMake(numbers[i*2+2].doubleValue, numbers[i*2+3].doubleValue);
+        
+        if (relative) {
+            [self.path addCurveToPoint:CGPointMake(_end.x+p.x, _end.y+p.y)
+                         controlPoint1:c1
+                         controlPoint2:CGPointMake(_end.x+c2.x, _end.y+c2.y)];
+            _end = CGPointMake(_end.x+p.x, _end.y+p.y);
+        } else {
+            [self.path addCurveToPoint:p controlPoint1:c1 controlPoint2:c2];
+            _end = p;
+        }
+        
+        self.preControlPoint = CGPointMake(_end.x+c2.x, _end.y+c2.y);
+    }
     
 }
 
 // T 命令用来创建与之前曲线相同的曲线，二次贝塞尔曲线
-- (void)addCubicRelative:(BOOL)relative {
-    
+- (void)addCubic:(NSArray<NSNumber *> *)numbers Relative:(BOOL)relative {
+    NSLog(@"No cubic solution.");
 }
 
-- (void)addHorizonRelative:(BOOL)relative {
+- (void)addHorizon:(NSArray<NSNumber *> *)numbers Relative:(BOOL)relative {
     
+    for (NSNumber *number in numbers) {
+        
+        CGPoint p = CGPointZero;
+        
+        if (relative) {
+            p = CGPointMake(_end.x + number.doubleValue, _end.y);
+        } else {
+            p = CGPointMake(number.doubleValue, _end.y);
+        }
+        _end = p;
+        [self.path addLineToPoint:p];
+    }
 }
 
-- (void)addVerticalRelative:(BOOL)relative {
+- (void)addVertical:(NSArray<NSNumber *> *)numbers Relative:(BOOL)relative {
     
+    for (NSNumber *number in numbers) {
+        
+        CGPoint p = CGPointZero;
+        
+        if (relative) {
+            p = CGPointMake(_end.x, _end.y + number.doubleValue);
+        } else {
+            p = CGPointMake(_end.x, number.doubleValue);
+        }
+        _end = p;
+        [self.path addLineToPoint:p];
+    }
 }
 
 - (void)close {

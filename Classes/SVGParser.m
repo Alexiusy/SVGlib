@@ -36,6 +36,7 @@
     } else if ([elementName isEqualToString:@"path"])
     {
         SVGPath *path = [[SVGPath alloc] initWithAttribute:attributeDict];
+        path.shape.path = path.path.CGPath;
         [self.layers addObject:path.shape];
         
     } else if ([elementName isEqualToString:@"line"])
