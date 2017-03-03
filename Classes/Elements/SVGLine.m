@@ -1,25 +1,24 @@
 //
 //  SVGLine.m
-//  Inspiration
 //
 //  Created by Zeacone on 2017/1/24.
-//  Copyright © 2017年 ics. All rights reserved.
+//  Copyright © 2017年 Zeacone. All rights reserved.
 //
 
 #import "SVGLine.h"
 
 @implementation SVGLine
 
-- (instancetype)initWithAttribute:(NSDictionary *)attribute
+- (instancetype)initWithAttribute:(NSDictionary *)attr
 {
-    self = [super initWithAttribute:attribute];
+    self = [super initWithAttribute:attr];
     if (self) {
-        [self drawLineWithAttr:attribute];
+        [self drawLine:attr];
     }
     return self;
 }
 
-- (void)drawLineWithAttr:(NSDictionary *)attr {
+- (void)drawLine:(NSDictionary *)attr {
     
     NSString *x1 = attr[@"x1"];
     NSString *y1 = attr[@"y1"];

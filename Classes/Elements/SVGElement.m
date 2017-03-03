@@ -1,60 +1,51 @@
 //
 //  SVGElement.m
-//  Inspiration
 //
 //  Created by Zeacone on 2017/1/24.
-//  Copyright © 2017年 ics. All rights reserved.
+//  Copyright © 2017年 Zeacone. All rights reserved.
 //
 
 #import "SVGElement.h"
 
-#define colorFromHex(hex, a) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:a]
-
-// Setting color from normal RGB way.
-#define colorFromRGB(r, g, b, a) [UIColor colorWithRed:r / 255.0 green:g / 255.0 blue:b / 255.0 alpha:a]
-
 @implementation SVGElement
 
-- (instancetype)initWithAttribute:(NSDictionary *)attribute
+- (instancetype)initWithAttribute:(NSDictionary *)attr
 {
     self = [super init];
     if (self) {
-        [self readAttribute:attribute];
+        [self readAttribute:attr];
     }
     return self;
 }
 
-- (void)readAttribute:(NSDictionary *)attribute {
+- (void)readAttribute:(NSDictionary *)attr {
     
     self.selectable = NO;
-    self.title      = [attribute objectForKey:@"title"];
-    self.identifier = [attribute objectForKey:@"id"];
-    self.className  = [attribute objectForKey:@"class"];
-    self.tranform   = [attribute objectForKey:@"transform"];
-    self.path       = [UIBezierPath bezierPath];
+    self.title      = attr[@"title"];
+    self.identifier = attr[@"id"];
+    self.className  = attr[@"class"];
+    self.tranform   = attr[@"transform"];
     
-    NSString *style = [attribute objectForKey:@"style"];
-    NSArray *styleComponents = [style componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@":;"]];
-    NSMutableArray *components = [NSMutableArray arrayWithArray:styleComponents];
-//    [components removeLastObject];
-    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     
-    for (NSInteger i = 0; i < components.count; i += 2) {
-        [dic setObject:components[i+1] forKey:components[i]];
+    NSMutableDictionary *property = [NSMutableDictionary dictionary];
+    
+    NSString *style = attr[@"style"];
+    NSCharacterSet *separateSet = [NSCharacterSet characterSetWithCharactersInString:@":;"];
+    NSArray *components = [style componentsSeparatedByCharactersInSet:separateSet];
+    
+    for (NSInteger i = 0; i < components.count / 2; i++) {
+        [property setObject:components[i*2] forKey:components[i*2+1]];
     }
     
-    if ([dic objectForKey:@"fill"]) {
-        self.fillColor = [self colorWithHexString:[dic objectForKey:@"fill"]];
-    } else if ([attribute objectForKey:@"fill"]) {
-        self.fillColor = [self colorWithHexString:[attribute objectForKey:@"fill"]];
-    }
+    self.strokeColor = [self colorWithHexString:attr[@"stroke"]];
+    NSString *fillColorStr = property[@"fill"] ? property[@"fill"] : attr[@"fill"];
+    self.fillColor = [self colorWithHexString:fillColorStr];
     
-    if ([attribute objectForKey:@"stroke"]) {
-        self.strokeColor = [self colorWithHexString:[attribute objectForKey:@"stroke"]];
-    } else {
-        self.strokeColor = [UIColor clearColor];
-    }
-    
+    [self initialize];
+}
+
+- (void)initialize {
+    self.path  = [UIBezierPath bezierPath];
     self.shape = [CAShapeLayer layer];
     self.shape.fillColor = self.fillColor.CGColor;
     self.shape.strokeColor = self.strokeColor.CGColor;

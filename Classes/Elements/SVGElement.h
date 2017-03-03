@@ -1,16 +1,15 @@
 //
 //  SVGElement.h
-//  Inspiration
-//
+//  
 //  Created by Zeacone on 2017/1/24.
-//  Copyright © 2017年 ics. All rights reserved.
+//  Copyright © 2017年 Zeacone. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 @interface SVGElement : NSObject
 
-- (instancetype)initWithAttribute:(NSDictionary *)attribute;
+- (instancetype)initWithAttribute:(NSDictionary *)attr;
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *identifier;

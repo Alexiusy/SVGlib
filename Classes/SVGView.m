@@ -30,6 +30,18 @@
         layer.affineTransform = CGAffineTransformScale(layer.affineTransform, 0.1, 0.1);
         [self.layer addSublayer:layer];
     }
+    
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
+    [self addGestureRecognizer:pan];
+}
+
+- (void)panAction:(UIPanGestureRecognizer *)pan {
+    
+    CGPoint translation = [pan translationInView:pan.view];
+    
+    pan.view.transform = CGAffineTransformTranslate(pan.view.transform, translation.x*10, translation.y);
+    
+    [pan setTranslation:CGPointZero inView:pan.view];
 }
 
 /*

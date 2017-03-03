@@ -1,46 +1,56 @@
 //
 //  SVGPolygon.m
-//  Inspiration
 //
 //  Created by Zeacone on 2017/1/24.
-//  Copyright © 2017年 ics. All rights reserved.
+//  Copyright © 2017年 Zeacone. All rights reserved.
 //
 
 #import "SVGPolygon.h"
 
 @implementation SVGPolygon
 
-- (instancetype)initWithAttribute:(NSDictionary *)attribute
+- (instancetype)initWithAttribute:(NSDictionary *)attr
 {
-    self = [super initWithAttribute:attribute];
+    self = [super initWithAttribute:attr];
     if (self) {
-        [self parseAttribute:attribute];
+        [self drawPolygon:attr];
     }
     return self;
 }
 
-- (void)parseAttribute:(NSDictionary *)attribute {
+- (void)drawPolygon:(NSDictionary *)attr {
     
-    NSString *points = attribute[@"points"];
-    NSArray<NSString *> *strArray = [points componentsSeparatedByString:@" "];
+    NSString *points = attr[@"points"];
     
-    [strArray enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        if (obj.length == 0) {
-            return;
-        }
-        NSString *point_string = [NSString stringWithFormat:@"{%@}", obj];
-        CGPoint point = CGPointFromString(point_string);
-        
-        if (idx == 0) {
-            [self.path moveToPoint:point];
+    NSScanner *scanner = [NSScanner scannerWithString:points];
+    
+    NSCharacterSet *skipSet = [NSCharacterSet characterSetWithCharactersInString:@" ,\n"];
+    scanner.charactersToBeSkipped = skipSet;
+    
+    double number;
+    NSMutableArray<NSNumber *> *numbers = [NSMutableArray array];
+    
+    while ([scanner scanDouble:&number]) {
+        [numbers addObject:@(number)];
+    }
+    
+    [self buildPath:numbers];
+}
+
+- (void)buildPath:(NSArray<NSNumber *> *)nums {
+    
+    for (NSInteger i = 0; i < nums.count / 2; i++) {
+        CGPoint p = CGPointMake(nums[i*2].doubleValue, nums[i*2+1].doubleValue);
+        if (i == 0) {
+            [self.path moveToPoint:p];
         } else {
-            [self.path addLineToPoint:point];
+            [self.path addLineToPoint:p];
         }
-    }];
+    }
+    
     [self.path closePath];
+    
     self.shape.path = self.path.CGPath;
-//    self.shape.fillColor = [UIColor clearColor].CGColor;
 }
 
 @end

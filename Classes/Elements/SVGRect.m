@@ -1,36 +1,33 @@
 //
 //  SVGRect.m
-//  Inspiration
-//
+//  
 //  Created by Zeacone on 2017/1/24.
-//  Copyright © 2017年 ics. All rights reserved.
+//  Copyright © 2017年 Zeacone. All rights reserved.
 //
 
 #import "SVGRect.h"
 
 @implementation SVGRect
 
-- (instancetype)initWithAttribute:(NSDictionary *)attribute
+- (instancetype)initWithAttribute:(NSDictionary *)attr
 {
-    self = [super initWithAttribute:attribute];
+    self = [super initWithAttribute:attr];
     if (self) {
-        
-        self.x = ((NSString *)attribute[@"x"]).doubleValue;
-        self.y = ((NSString *)attribute[@"y"]).doubleValue;
-        self.width = ((NSString *)attribute[@"width"]).doubleValue;
-        self.height = ((NSString *)attribute[@"height"]).doubleValue;
-        
-        [self drawRectWithAttribute:attribute];
+        [self drawRect:attr];
     }
     return self;
 }
 
-- (void)drawRectWithAttribute:(NSDictionary *)attr {
+- (void)drawRect:(NSDictionary *)attr {
     
-    CGRect rect = CGRectMake(_x, _y, _width, _height);
+    NSString *x = attr[@"x"];
+    NSString *y = attr[@"y"];
+    NSString *width = attr[@"width"];
+    NSString *height = attr[@"height"];
+    
+    CGRect rect = CGRectMake(x.doubleValue, y.doubleValue, width.doubleValue, height.doubleValue);
     self.path = [UIBezierPath bezierPathWithRect:rect];
 
-    
     self.shape.path = self.path.CGPath;
 }
 

@@ -1,9 +1,8 @@
 //
 //  SVGParser.m
-//  Inspiration
 //
 //  Created by Zeacone on 2017/1/24.
-//  Copyright © 2017年 ics. All rights reserved.
+//  Copyright © 2017年 Zeacone. All rights reserved.
 //
 
 #import "SVGParser.h"
@@ -29,7 +28,8 @@
     
     if ([elementName isEqualToString:@"svg"])
     {
-        NSLog(@"321");
+        // 获取公有属性 like viewbox
+        
     } else if ([elementName isEqualToString:@"g"])
     {
         // group
@@ -72,7 +72,7 @@
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser {
-    NSLog(@"123");
+    
 }
 
 @end

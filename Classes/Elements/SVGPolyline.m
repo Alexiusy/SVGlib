@@ -1,20 +1,19 @@
 //
 //  SVGPolyline.m
-//  Inspiration
 //
 //  Created by Zeacone on 2017/1/24.
-//  Copyright © 2017年 ics. All rights reserved.
+//  Copyright © 2017年 Zeacone. All rights reserved.
 //
 
 #import "SVGPolyline.h"
 
 @implementation SVGPolyline
 
-- (instancetype)initWithAttribute:(NSDictionary *)attribute
+- (instancetype)initWithAttribute:(NSDictionary *)attr
 {
-    self = [super initWithAttribute:attribute];
+    self = [super initWithAttribute:attr];
     if (self) {
-        [self drawPolyline:attribute];
+        [self drawPolyline:attr];
     }
     return self;
 }
@@ -42,6 +41,7 @@
 - (void)buildPath:(NSArray<NSNumber *> *)numbers {
     
     for (NSInteger i = 0; i < numbers.count / 2; i++) {
+        
         CGPoint p = CGPointMake(numbers[i*2].doubleValue, numbers[i*2+1].doubleValue);
         
         if (i == 0) {
