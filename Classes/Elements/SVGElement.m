@@ -23,6 +23,8 @@
     self.selectable = NO;
     self.title      = attr[@"title"];
     self.identifier = attr[@"id"];
+    
+// TODO: 解析class style
     self.className  = attr[@"class"];
     self.tranform   = attr[@"transform"];
     
