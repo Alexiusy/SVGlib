@@ -31,6 +31,7 @@
         [self.layer addSublayer:layer];
     }
     
+    // TODO: hit test实现
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
     [self addGestureRecognizer:pan];
 }
