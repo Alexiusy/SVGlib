@@ -16,4 +16,5 @@ Then, that's done.
 
 1. Add scale, rotate and select single layer.
 2. Filter and gradient effect etc.
+3. Parse global style.
 
