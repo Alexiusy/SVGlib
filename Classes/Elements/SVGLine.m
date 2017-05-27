@@ -30,8 +30,6 @@
     
     [self.path moveToPoint:p1];
     [self.path addLineToPoint:p2];
-    
-    self.shape.path = self.path.CGPath;
 }
 
 @end

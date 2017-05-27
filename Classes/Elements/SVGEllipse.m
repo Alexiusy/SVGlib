@@ -28,8 +28,7 @@
     CGRect rect = CGRectMake(cx.doubleValue-rx.doubleValue, cy.doubleValue-ry.doubleValue, rx.doubleValue*2, ry.doubleValue*2);
     
     self.path = [UIBezierPath bezierPathWithOvalInRect:rect];
-    
-    self.shape.path = self.path.CGPath;
+    self.selectable = YES;
 }
 
 @end

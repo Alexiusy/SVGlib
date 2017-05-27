@@ -48,10 +48,6 @@
 
 - (void)initialize {
     self.path  = [UIBezierPath bezierPath];
-    self.shape = [CAShapeLayer layer];
-    self.shape.fillColor = self.fillColor.CGColor;
-    self.shape.strokeColor = self.strokeColor.CGColor;
-    self.shape.lineWidth = 1.0;
 }
 
 - (UIColor *)colorWithHexString:(NSString *)stringToConvert
@@ -88,6 +84,14 @@
                            green:((float) g / 255.0f)
                             blue:((float) b / 255.0f)
                            alpha:1.0f];
+}
+
+- (void)setTranform:(NSString *)tranform {
+    _tranform = tranform;
+    if (_tranform) {
+        CGAffineTransform transform = [SVGTransformParser transformFromString:_tranform];
+        [self.path applyTransform:transform];
+    }
 }
 
 @end

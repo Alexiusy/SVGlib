@@ -8,41 +8,126 @@
 
 #import "SVGView.h"
 #import "SVGParser.h"
+#import <objc/runtime.h>
+
+static const void *key;
+
+@implementation CAShapeLayer (selectable)
+
+- (NSNumber *)selectable {
+    return objc_getAssociatedObject(self, &key);
+}
+
+- (void)setSelectable:(NSNumber *)selectable {
+    objc_setAssociatedObject(self, &key, selectable, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+@end
+
+@interface SVGView ()
+
+@property (nonatomic, strong) CAShapeLayer *oldLayer;
+@property (nonatomic, strong) CAShapeLayer *tempLayer;
+
+@property (nonatomic, assign) CGFloat multiplier;
+
+@end
 
 @implementation SVGView
 
-
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithFilePath:(NSString *)filePath
+{
+    self = [super init];
+    if (self) {
+        [self parseSVG:filePath];
+    }
+    return self;
+}
+- (instancetype)initWithFrame:(CGRect)frame filePath:(NSString *)filePath
 {
     self = [super initWithFrame:frame];
     if (self) {
-        SVGParser *parser = [[SVGParser alloc] init];
-        [parser parseFile:@"bazhan.svg"];
-        
-        [self drawLayers:[parser.layers copy]];
+        [self parseSVG:filePath];
     }
     return self;
 }
 
-- (void)drawLayers:(NSArray<CAShapeLayer *> *)layers {
+- (void)setFilePath:(NSString *)filePath {
+    _filePath = filePath;
     
-    for (CAShapeLayer *layer in layers) {
-        layer.affineTransform = CGAffineTransformScale(layer.affineTransform, 0.1, 0.1);
-        [self.layer addSublayer:layer];
-    }
-    
-    // TODO: hit test实现
-    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
-    [self addGestureRecognizer:pan];
+    [self parseSVG:filePath];
 }
 
-- (void)panAction:(UIPanGestureRecognizer *)pan {
+- (void)parseSVG:(NSString *)filePath {
     
-    CGPoint translation = [pan translationInView:pan.view];
+    SVGParser *parser = [[SVGParser alloc] init];
+    [parser parseFile:filePath];
     
-    pan.view.transform = CGAffineTransformTranslate(pan.view.transform, translation.x*10, translation.y);
+    self.elements = [parser.elements copy];
+    self.size = parser.svgSize;
     
-    [pan setTranslation:CGPointZero inView:pan.view];
+    self.bounds = CGRectMake(0, 0, self.size.width, self.size.height);
+    
+    [self drawLayers:self.elements];
+}
+
+- (CGFloat)calculateMultiple {
+    return 0;
+}
+
+- (void)drawLayers:(NSArray<SVGElement *> *)layers {
+    
+    for (SVGElement *element in layers) {
+        
+        CAShapeLayer *layer = [CAShapeLayer layer];
+        layer.path = element.path.CGPath;
+        layer.lineWidth = .1;
+        layer.strokeColor = element.strokeColor.CGColor;
+        layer.fillColor = element.fillColor.CGColor;
+        
+        layer.selectable = [NSNumber numberWithBool:element.selectable];
+        
+        layer.shadowColor = [UIColor lightGrayColor].CGColor;
+        layer.shadowPath = layer.path;
+        layer.shadowRadius = .1;
+        layer.shadowOpacity = .4;
+        layer.shadowOffset = CGSizeMake(0, 0);
+        
+        [self.layer addSublayer:layer];
+    }
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    CGPoint touch_point = [touches.anyObject locationInView:self];
+    
+    [self exchangeAttribute:self.oldLayer Layer2:self.tempLayer];
+    
+    [self.layer.sublayers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(CALayer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        CAShapeLayer *shape = (CAShapeLayer *)obj;
+        
+        UIBezierPath *bezierPath = [UIBezierPath bezierPathWithCGPath:shape.path];
+        
+        if ([bezierPath containsPoint:touch_point] && shape.selectable.boolValue) {
+            
+            self.oldLayer = shape;
+            self.tempLayer = [CAShapeLayer layer];
+            
+            [self exchangeAttribute:self.tempLayer Layer2:self.oldLayer];
+            
+            shape.fillColor = [UIColor colorWithRed:arc4random() % 255 / 255.0 green:arc4random() % 255 / 255.0 blue:arc4random() % 255 / 255.0 alpha:1.0].CGColor;
+            *stop = YES;
+        }
+    }];
+}
+
+- (void)exchangeAttribute:(CAShapeLayer *)layer1 Layer2:(CAShapeLayer *)layer2 {
+    layer1.strokeColor = layer2.strokeColor;
+    layer1.fillColor = layer2.fillColor;
+    layer1.shadowPath = layer2.shadowPath;
+    layer1.shadowColor = layer2.shadowColor;
+    layer1.shadowOffset = layer2.shadowOffset;
+    layer1.shadowRadius = layer2.shadowRadius;
+    layer1.shadowOpacity = layer2.shadowOpacity;
 }
 
 /*

@@ -1,7 +1,7 @@
-# SVGLib
+# SVGlib
 A repository to parse SVG and draw it on the screen with CAShapeLayer.
 
-## Done
+## Feature
 Parse basic element like path, line, rect, circle, ellipse, polygon and polyline.
 
 ## Usage

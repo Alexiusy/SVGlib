@@ -6,10 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SVGElement.h"
 
 @interface SVGParser : NSObject <NSXMLParserDelegate>
 
-@property (nonatomic, strong) NSMutableArray<CAShapeLayer *> *layers;
+@property (nonatomic, strong) NSMutableArray<SVGElement *> *elements;
+
+@property (nonatomic, assign) CGSize svgSize;
 
 - (void)parseFile:(NSString *)fileName;
 

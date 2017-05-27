@@ -358,6 +358,7 @@
 #pragma mark - 关闭贝塞尔曲线
 - (void)close {
     [self.path closePath];
+    self.selectable = YES;
 }
 
 @end

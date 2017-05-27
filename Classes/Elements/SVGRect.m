@@ -27,8 +27,10 @@
     
     CGRect rect = CGRectMake(x.doubleValue, y.doubleValue, width.doubleValue, height.doubleValue);
     self.path = [UIBezierPath bezierPathWithRect:rect];
-
-    self.shape.path = self.path.CGPath;
+    
+    if (![self.identifier isEqualToString:@"back"]) {
+        self.selectable = YES;
+    }
 }
 
 @end

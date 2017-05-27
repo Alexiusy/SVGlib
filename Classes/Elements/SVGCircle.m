@@ -29,8 +29,7 @@
                      startAngle:0
                        endAngle:M_PI * 2
                       clockwise:YES];
-    
-    self.shape.path = self.path.CGPath;
+    self.selectable = YES;
 }
 
 @end

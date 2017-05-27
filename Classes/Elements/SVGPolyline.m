@@ -50,8 +50,6 @@
             [self.path addLineToPoint:p];
         }
     }
-    
-    self.shape.path = self.path.CGPath;
 }
 
 @end

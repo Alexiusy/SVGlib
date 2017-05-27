@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SVGTransformParser.h"
 
 @interface SVGElement : NSObject
 
@@ -18,7 +19,6 @@
 @property (nonatomic, copy) NSString *group;
 
 #pragma mark - Public property
-@property (nonatomic, strong) CAShapeLayer *shape;
 @property (nonatomic, strong) UIBezierPath *path;
 
 /**
