@@ -1,20 +1,21 @@
 # SVGlib
-A repository to parse SVG and draw it on the screen with CAShapeLayer.
+A repository for displaying SVG with CAShapeLayer.
 
 ## Feature
 Parse basic element like path, line, rect, circle, ellipse, polygon and polyline.
 
+- Display a svg on the iPhone screen with CAShapeLayer.
+- Support select single layer.
+- Support svg original transform.
+
 ## Usage
 ```objective-c
-SVGView *svgView = [[FXSVGView alloc] initWithFrame:frame];
-[svgView loadSVGFile:@"filename"];
-[self.view addSubview:svgView];
+// svgView is a instance of SVGView.
+self.svgView.filePath = @"filename.svg";
+[self.view addSubview:self.svgView];
 ```
 Then, that's done.
 
 ## TODO
 
-1. Add scale, rotate and select single layer.
-2. Filter and gradient effect etc.
-3. Parse global style.
-
+- Add gradient effect and filter effect support.
