@@ -3,7 +3,7 @@ A repository for displaying SVG with CAShapeLayer.
 
 
 
-![screenshot](https://github.com/Zeacone/SVGlib/blob/master/screenshot.gif)
+![screenshot](http://7xlzdc.com1.z0.glb.clouddn.com/screenshot.gif)
 
 ## Feature
 Parse basic element like path, line, rect, circle, ellipse, polygon and polyline.
