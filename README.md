@@ -3,7 +3,7 @@ A repository for displaying SVG with CAShapeLayer.
 
 
 
-![screenshot](https://github.com/Zeacone/SVGlib/blob/master/screenshot.gif)
+![screenshot](http://7xlzdc.com1.z0.glb.clouddn.com/screenshot.gif)
 
 ## Feature
 Parse basic element like path, line, rect, circle, ellipse, polygon and polyline.
@@ -14,9 +14,12 @@ Parse basic element like path, line, rect, circle, ellipse, polygon and polyline
 
 ## Usage
 ```objective-c
-// svgView is a instance of SVGView.
-self.svgView.filePath = @"filename.svg";
-[self.view addSubview:self.svgView];
+// filePath is the svg file path.
+let svgView = SVGView().parse(filePath)
+svgView.center = CGPoint(x: 200, y: 300)
+svgView.transform = CGAffineTransform.init(scaleX: 0.2, y: 0.2)
+
+self.view.addSubview(svgView);
 ```
 Then, that's done.
 
