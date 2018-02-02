@@ -8,10 +8,39 @@
 
 import UIKit
 
+struct Stack<T> {
+    var items = [T]()
+    
+    mutating func pop() -> T {
+        return items.removeLast()
+    }
+    
+    mutating func push(_ item: T) {
+        items.append(item)
+    }
+    
+    func top() -> T? {
+        return items.last
+    }
+}
+
 class SVGElement: NSObject {
 
+    // Element's parent
+    var parent: SVGElement?
+    
+    // Element's children
+    var children = [SVGElement]()
+    
+    // Element's name
+    var name: String!
+    
     /// Element's id to find this element easily.
-    var identifier: String?
+    var id: String?
+    
+    var fillRule: String?
+    
+    var transform: CGAffineTransform?
     
     /// Element's title. If this property is not nil, then we should show a text element on it.
     var title: String?
@@ -62,7 +91,7 @@ class SVGElement: NSObject {
         
         self.title = attr["title"]
         
-        self.identifier = attr["id"]
+        self.id = attr["id"]
         
         self.strokeColor = self.hexColorString(attr["stroke"])
         

@@ -15,7 +15,6 @@
 		631AE2BB2014CEBB001FE06E /* SVGPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AE2B52014CEBA001FE06E /* SVGPath.swift */; };
 		631AE2BC2014CEBB001FE06E /* SVGView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AE2B62014CEBA001FE06E /* SVGView.swift */; };
 		631AE2BD2014CEBB001FE06E /* SVGParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AE2B72014CEBA001FE06E /* SVGParser.swift */; };
-		631AE2BE2014CEBB001FE06E /* SVGNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AE2B82014CEBA001FE06E /* SVGNode.swift */; };
 		631AE2BF2014CEBB001FE06E /* SVGElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AE2B92014CEBB001FE06E /* SVGElement.swift */; };
 		631AE2C02014CEBB001FE06E /* SVGShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AE2BA2014CEBB001FE06E /* SVGShape.swift */; };
 		631AE2C22014CECC001FE06E /* Mahuri.svg in Resources */ = {isa = PBXBuildFile; fileRef = 631AE2C12014CECC001FE06E /* Mahuri.svg */; };
@@ -34,7 +33,6 @@
 		631AE2B52014CEBA001FE06E /* SVGPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGPath.swift; sourceTree = "<group>"; };
 		631AE2B62014CEBA001FE06E /* SVGView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGView.swift; sourceTree = "<group>"; };
 		631AE2B72014CEBA001FE06E /* SVGParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGParser.swift; sourceTree = "<group>"; };
-		631AE2B82014CEBA001FE06E /* SVGNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGNode.swift; sourceTree = "<group>"; };
 		631AE2B92014CEBB001FE06E /* SVGElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGElement.swift; sourceTree = "<group>"; };
 		631AE2BA2014CEBB001FE06E /* SVGShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGShape.swift; sourceTree = "<group>"; };
 		631AE2C12014CECC001FE06E /* Mahuri.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Mahuri.svg; sourceTree = "<group>"; };
@@ -87,9 +85,8 @@
 		631AE2B42014CE78001FE06E /* src */ = {
 			isa = PBXGroup;
 			children = (
-				631AE2B82014CEBA001FE06E /* SVGNode.swift */,
-				631AE2B92014CEBB001FE06E /* SVGElement.swift */,
 				631AE2B72014CEBA001FE06E /* SVGParser.swift */,
+				631AE2B92014CEBB001FE06E /* SVGElement.swift */,
 				631AE2B52014CEBA001FE06E /* SVGPath.swift */,
 				631AE2BA2014CEBB001FE06E /* SVGShape.swift */,
 				631AE2B62014CEBA001FE06E /* SVGView.swift */,
@@ -178,7 +175,6 @@
 				631AE2C02014CEBB001FE06E /* SVGShape.swift in Sources */,
 				631AE2A52014CE4F001FE06E /* ViewController.swift in Sources */,
 				631AE2A32014CE4F001FE06E /* AppDelegate.swift in Sources */,
-				631AE2BE2014CEBB001FE06E /* SVGNode.swift in Sources */,
 				634CDECF201B6D2C00A93139 /* SVGFilter.swift in Sources */,
 				631AE2BB2014CEBB001FE06E /* SVGPath.swift in Sources */,
 				634CDED1201B6E1D00A93139 /* SVGGradient.swift in Sources */,
