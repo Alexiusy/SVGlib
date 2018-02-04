@@ -8,6 +8,10 @@
 
 import UIKit
 
+class SVGClippath: SVGElement {
+    
+}
+
 class SVGPath: SVGElement {
     
     var c_pre = CGPoint.zero

@@ -35,8 +35,13 @@ class SVGElement: NSObject {
     // Element's name
     var name: String!
     
+    var attr: [String: String]!
+    
     /// Element's id to find this element easily.
     var id: String?
+    
+    var clipPath: String?
+    var filter: String?
     
     var fillRule: String?
     
@@ -77,12 +82,13 @@ class SVGElement: NSObject {
     /// Initializer
     ///
     /// - Parameter attr: Some properties.
-    required init(_ attr: [String: String]) {
+    required init(name: String, attr: [String: String]) {
         super.init()
+        self.name = name
+        
         self.readProperty(attr)
         self.draw(attr: attr)
     }
-    
     
     /// Read some public properties from attribute collections.
     ///
@@ -100,6 +106,9 @@ class SVGElement: NSObject {
         self.transformString = attr["transform"]
         
         self.className = attr["class"]
+        
+        self.filter = attr["filter"]
+        self.clipPath = attr["clip-path"]
     }
     
     

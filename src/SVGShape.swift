@@ -48,7 +48,7 @@ class SVGRect: SVGElement {
         
         self.path = UIBezierPath(rect: rect)
         
-        if self.identifier == "background" {
+        if self.id == "background" {
             self.clickable = false
         }
     }
@@ -143,7 +143,7 @@ class SVGPolygon: SVGElement {
         
         self.path.close()
         
-        if self.identifier == "background" {
+        if self.id == "background" {
             self.clickable = false
         }
     }

@@ -11,7 +11,7 @@ import UIKit
 // MARK: Document parser
 class SVGDocumentParser: NSObject, XMLParserDelegate {
     
-//    var stack = Stack<Node>()
+    var stack = Stack<SVGElement>()
 //    var nodes = [Node]()
     
     /// Store all elements from parsed svg file.
@@ -19,9 +19,6 @@ class SVGDocumentParser: NSObject, XMLParserDelegate {
     
     /// Size of whole svg.
     var viewbox: CGSize!
-    
-    /// Store group transform
-    var transform: String?
     
     
     func parse(_ fileName: String) {
@@ -39,12 +36,27 @@ class SVGDocumentParser: NSObject, XMLParserDelegate {
     // MARK: Start parsing single element.
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         
-//        let node = Node()
-//        node.name = elementName
-//        node.attr = attributeDict
-//
-//        stack.push(node)
-//        nodes.append(node)
+        var node: SVGElement
+        
+        let namespace = Bundle.main.infoDictionary!["CFBundleExecutable"] as! String
+        
+        var name = elementName
+        var first = String.init(name.removeFirst()).capitalized
+        
+        first.append(name)
+        
+        let clsName = "\(namespace).SVG\(first)"
+        let ElementCls = NSClassFromString(clsName) as? SVGElement.Type
+        
+        if let valueClass = ElementCls {
+            node = valueClass.init(name: elementName, attr: attributeDict)
+        } else {
+            node = SVGElement(name: elementName, attr: attributeDict)
+        }
+        
+        // 此处将元素压入栈
+        stack.push(node)
+        
         
         switch elementName {
         case "svg":
@@ -52,20 +64,8 @@ class SVGDocumentParser: NSObject, XMLParserDelegate {
             let height = (attributeDict["height"] as NSString?)?.doubleValue
             viewbox = CGSize(width: width!, height: height!)
 
-        case "g":
-            self.transform = attributeDict["transform"]
-
-        case "path", "rect", "circle", "ellipse", "line", "polyline", "polygon":
-
-            let namespace = Bundle.main.infoDictionary!["CFBundleExecutable"] as! String
-            let className = "\(namespace).SVG\(elementName.capitalized)"
-            let ElementClass = NSClassFromString(className) as! SVGElement.Type
-            let element: SVGElement? = ElementClass.init(attributeDict)
-
-            if let newElement = element {
-                newElement.transformString = self.transform
-                elements.append(newElement)
-            }
+        case "path", "rect", "circle", "ellipse", "line", "polyline", "polygon", "linearGradient", "filter", "clipPath":
+            elements.append(node)
 
         default:
             print("Don't have any solutions for attribute \(elementName).")
@@ -74,19 +74,14 @@ class SVGDocumentParser: NSObject, XMLParserDelegate {
     
     // MARK: Finish parsing single element.
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        if elementName == "g" {
-            self.transform = nil
+        
+        let element = stack.pop()
+        
+        if let top = stack.top() {
+            element.parent = top
+            top.children.append(element)
         }
-
-//        let tempNode = stack.pop()
-//
-//        if let top = stack.top() {
-//            tempNode.parent = top
-//            top.children.append(tempNode)
-//        }
     }
-    
-
 }
 
 

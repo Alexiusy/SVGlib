@@ -8,6 +8,10 @@
 
 import UIKit
 
-class SVGFilter: NSObject {
+class SVGFilter: SVGElement {
 
+}
+
+class SVGFeGaussianBlur: SVGElement {
+    
 }

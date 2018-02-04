@@ -8,6 +8,6 @@
 
 import UIKit
 
-class SVGGradient: NSObject {
+class SVGLinearGradient: SVGElement {
 
 }
